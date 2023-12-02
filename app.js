@@ -18,7 +18,6 @@ app.use(express.json());
 app.use(morgan("dev"));
 app.use(cors());
 app.use(helmet());
-app.use(express.static('public'))
 
 // * Connecting to the DB
 mongoose
