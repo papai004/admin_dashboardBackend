@@ -25,4 +25,6 @@ const dataSchema = new Schema(
   }
 );
 
+dataSchema.index({ name: 'text' });
+
 export default mongoose.model("data", dataSchema);

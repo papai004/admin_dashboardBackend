@@ -42,9 +42,21 @@ router.post(
   );
 
   router.post(
-    "/delete_data",
+    "/edit_data",
     [
       body("email").notEmpty().isEmail(),
+      body("nameToUpdate").notEmpty(),
+      body("emailToUpdate").notEmpty().isEmail(),
+      body("roleToUpdate").notEmpty(),
+    ],
+    validationErrorHandler,
+    adminController.editData
+  );
+
+  router.post(
+    "/delete_data",
+    [
+      body("_id").notEmpty(),
     ],
     validationErrorHandler,
     adminController.deleteData

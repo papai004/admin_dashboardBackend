@@ -34,17 +34,26 @@ class AdminController {
     try {
       // * Creating a new data with the given payload
       const savedDetails = await AdminService.getData(req.body);
-      console.log(savedDetails);
 
       res.status(201).json({
         status: "success",
         message: "Data found successfully",
-        data: {
-          name: savedDetails?.name,
-          id: savedDetails?._id,
-          email: savedDetails?.email,
-          role: savedDetails?.role,
-        },
+        data: savedDetails
+      });
+    } catch (error) {
+      next(error);
+    }
+  }
+
+  async editData(req, res, next) {
+    try {
+      // * Creating a new data with the given payload
+      const savedDetails = await AdminService.editData(req.body);
+
+      res.status(201).json({
+        status: "success",
+        message: "Data updated successfully",
+        data: savedDetails
       });
     } catch (error) {
       next(error);

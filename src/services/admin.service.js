@@ -41,7 +41,7 @@ class AdminService {
         if (payload?.searchString) {
           query = {
             ...query,
-            $text: { $search: new RegExp(payload?.searchString, "i") },
+            $text: { $search: payload.searchString },
           };
         }
 
@@ -63,17 +63,50 @@ class AdminService {
     });
   }
 
-  async deleteData(payload) {
+  async editData(payload) {
     return new Promise(async (resolve, reject) => {
       try {
-        const { email } = payload;
+        const { email, nameToUpdate, emailToUpdate, roleToUpdate } = payload;
 
         // * Checking a single data from Database
         const foundData = await DataModel.findOne({
           email,
         });
 
-        // * If no students are found reject
+        // * If no datas are found reject
+        if (!foundData || foundData.isDeleted === true) {
+          reject(
+            new Error("No data found", {
+              indicator: "DB",
+              status: 404,
+            })
+          );
+          return;
+        }
+        // As the data is present now setting isDeleted to true
+        foundData.name = nameToUpdate;
+        foundData.email = emailToUpdate;
+        foundData.role = roleToUpdate;
+
+        const setUpdateDetails = await foundData.save();
+        resolve(setUpdateDetails);
+      } catch (error) {
+        reject(error);
+      }
+    });
+  }
+
+  async deleteData(payload) {
+    return new Promise(async (resolve, reject) => {
+      try {
+        const { _id } = payload;
+
+        // * Checking a single data from Database
+        const foundData = await DataModel.findOne({
+          _id,
+        });
+
+        // * If no datas are found reject
         if (!foundData || foundData.isDeleted === true) {
           reject(
             new Error("No data found", {
