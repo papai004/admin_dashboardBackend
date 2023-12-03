@@ -30,9 +30,6 @@ class AdminService {
       try {
         const { page, size } = payload;
 
-        const limit = parseInt(size);
-        const skip = (page - 1) * size;
-
         let query = {
           isDeleted: false,
         };
@@ -45,7 +42,7 @@ class AdminService {
           };
         }
 
-        const foundDatas = await DataModel.find(query).limit(limit).skip(skip);
+        const foundDatas = await DataModel.find(query);
         const count = await DataModel.countDocuments(query);
 
         if (!foundDatas || foundDatas.length < 1) {
