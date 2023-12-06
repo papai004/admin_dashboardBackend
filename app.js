@@ -4,6 +4,8 @@ import dotenv from "dotenv";
 import morgan from "morgan";
 import cors from "cors";
 import helmet from "helmet";
+import cron from "node-cron";
+import axios from "axios";
 
 dotenv.config();
 
@@ -32,6 +34,16 @@ mongoose
 // * All App routes
 app.use("/admin", adminRoutes);
 // app.use("/auth", authRoutes);
+
+cron.schedule('*/14 * * * *', () => {
+  axios.get(process.env.BACKEND_SERVER_URL)
+    .then(response => {
+      console.log('Ping successful');
+    })
+    .catch(error => {
+      console.error('Error pinging server:', error.message);
+    });
+});
 
 app.get("/", function (req, res) {
   res.send("Hello World");
